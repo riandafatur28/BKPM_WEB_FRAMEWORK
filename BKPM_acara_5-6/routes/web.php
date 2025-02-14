@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DetailProfilController;
+use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ManagementUserController;
 
@@ -18,4 +20,10 @@ Route::get('/', function () {
 Route::get("/home", function(){
     return view("home");
 });
+
+Route::get('/landing', function() {
+    return view('index');
+});
+
+Route::get('sayHello',[LandingController::class, 'viewLanding']);
 
