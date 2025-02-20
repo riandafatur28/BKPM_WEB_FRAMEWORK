@@ -100,8 +100,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Frontend'], function () {
     Route::resource('home', HomeController::class);
 });
 
-// Route untuk backend
-// Route::group(['namespace' => 'App\Http\Controllers\Backend'], function () {
-//     Route::resource('dashboard', DashboardController::class);
-//     Route::resource('product', ProductController::class);
-// });
+//Route untuk backend
+Route::group(['namespace' => 'App\Http\Controllers\Backend'], function () {
+    Route::resource('dashboard', DashboardController::class);
+    Route::resource('product', ProductController::class);
+});
