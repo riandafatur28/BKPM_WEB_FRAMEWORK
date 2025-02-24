@@ -1,28 +1,19 @@
 <?php
-
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use App\Http\Middleware\TerminableMiddleware;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
+    public function register()
     {
-        //
+        // Mendaftarkan TerminableMiddleware di dalam container
+        $this->app->singleton(TerminableMiddleware::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+    public function boot()
     {
-        // Bagian BKPM Acara 3
-        // Untuk menambahkan constrain route global, letakkan constrain disini menggunakan metode pattern. karena laravel 11 sudah menghapus RouteServiceProvider.php
-        // contoh
-        // Route::pattern('id', '[0-9]+');
+        // Mendaftarkan middleware jika perlu
     }
 }

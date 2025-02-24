@@ -6,6 +6,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Middleware\CheckAge; // Pastikan ada tanda titik koma
 
 // Route untuk user management
 Route::get('user', [ManagementUserController::class, 'index']);
@@ -25,18 +26,28 @@ Route::get('/', function () {
 Route::get("/home", [HomeController::class, 'index'])->name('home');
 
 // Route untuk backend dashboard dan produk
-Route::group(['namespace' => 'App\Http\Controllers\Backend'], function () {
-    Route::resource('dashboard', DashboardController::class);
-    Route::resource('product', ProductController::class);
-});
+Route::resource('dashboard', DashboardController::class);
+Route::resource('product', ProductController::class);
 
 // Middleware auth untuk halaman profile admin
 Route::get('/admin/profile', function () {
     // Logic untuk halaman profile admin
 })->middleware('auth');
 
-// Auth routes (login, register, logout)
+// Route dengan middleware multiple
+Route::get('/', function () {
+    // Logic di sini
+})->middleware(['first', 'second']); // Pastikan middleware 'first' dan 'second' ada
+
+// Route dengan CheckAge middleware
+Route::get('admin/profile', function () {
+    // Logic untuk halaman profile admin
+})->middleware(CheckAge::class);
+
+use Illuminate\Support\Facades\Auth;
+
 Auth::routes();
+
 
 // Route untuk redirect dan constraints
 Route::redirect('/welcome', '/');
@@ -91,3 +102,30 @@ Route::name('pre')->prefix('cobalagi')->group(function () {
         return "Ini halaman daftar pengguna previx name.";
     })->name('pv.user');
 });
+
+// Route dengan middleware admin
+Route::group(['middleware' => ['admin']], function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    });
+
+    Route::get('/admin/settings', function () {
+        return view('admin.settings');
+    });
+});
+
+// Route Group Middleware acara 12
+Route::get('/', function () {
+})->middleware('web');
+
+Route::group(['middleware' => ['web']], function () {
+
+});
+
+Route::middleware(['web', 'subscribed'])->group(function () {
+
+});
+
+Route::put('post/{id}', function ($id) {
+
+})->middleware('role:editor');
