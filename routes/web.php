@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Frontend\HomeController;
 
+// Route untuk user management
 Route::get('user', [ManagementUserController::class, 'index']);
 Route::get('user/create', [ManagementUserController::class, 'create']);
 Route::post('user', [ManagementUserController::class, 'store']);
@@ -15,26 +16,29 @@ Route::get('user/{id}/edit', [ManagementUserController::class, 'edit']);
 Route::put('user/{id}', [ManagementUserController::class, 'update']);
 Route::delete('user/{id}', [ManagementUserController::class, 'destroy']);
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get("/home", function(){
-    return view("home");
-});
-
-// Route dasar
+// Route untuk halaman welcome
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-// Route untuk halaman home
-Route::get("/home", function(){
-    return view("home");
+// Route untuk frontend home
+Route::get("/home", [HomeController::class, 'index'])->name('home');
+
+// Route untuk backend dashboard dan produk
+Route::group(['namespace' => 'App\Http\Controllers\Backend'], function () {
+    Route::resource('dashboard', DashboardController::class);
+    Route::resource('product', ProductController::class);
 });
 
+// Middleware auth untuk halaman profile admin
+Route::get('/admin/profile', function () {
+    // Logic untuk halaman profile admin
+})->middleware('auth');
 
-// Route redirect
+// Auth routes (login, register, logout)
+Auth::routes();
+
+// Route untuk redirect dan constraints
 Route::redirect('/welcome', '/');
 Route::redirect('/welcome301', '/', 301);
 Route::redirect('/welcome302', '/', 302);
@@ -47,7 +51,7 @@ Route::get('/hai/{name}', function ($name) {
     return "Halo, $name!";
 })->where('name', '[A-Za-z]+');
 
-// Route dengan Global Constraints (dari providers)
+// Route dengan Global Constraints
 Route::get('/nameGlobal/{nameGlobal}', function ($nameGlobal) {
     return "Halo, $nameGlobal!";
 });
@@ -55,12 +59,10 @@ Route::get('/idGlobal/{idGlobal}', function ($idGlobal) {
     return "User ID: $idGlobal";
 });
 
-// Route Encoded Forward Slashes
+// Route untuk search dengan encoded forward slashes
 Route::get('/search/{search}', function ($search) {
     return $search;
 })->where('search', '.*');
-
-
 
 // Subdomain routing
 Route::domain('{account}.example.com')->group(function () {
@@ -69,7 +71,7 @@ Route::domain('{account}.example.com')->group(function () {
     });
 });
 
-// Route dengan prefix
+// Route dengan prefix untuk admin
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', function () {
         return "Ini halaman dashboard admin.";
@@ -89,23 +91,3 @@ Route::name('pre')->prefix('cobalagi')->group(function () {
         return "Ini halaman daftar pengguna previx name.";
     })->name('pv.user');
 });
-
-// Route untuk frontend
-Route::group(['namespace' => 'App\Http\Controllers\Frontend'], function () {
-    Route::resource('home', HomeController::class);
-});
-
-// Route untuk frontend
-Route::group(['namespace' => 'App\Http\Controllers\Frontend'], function () {
-    Route::resource('home', HomeController::class);
-});
-
-//Route untuk backend
-Route::group(['namespace' => 'App\Http\Controllers\Backend'], function () {
-    Route::resource('dashboard', DashboardController::class);
-    Route::resource('product', ProductController::class);
-});
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
