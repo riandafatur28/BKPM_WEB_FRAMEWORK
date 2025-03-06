@@ -6,7 +6,10 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Middleware\CheckAge; // Pastikan ada tanda titik koma
+use App\Http\Middleware\CheckAge;
+use App\Http\Controllers\Backend\PendidikanController;
+use App\Http\Controllers\Backend\PengalamanKerjaController;
+
 
 // Route untuk user management
 Route::get('user', [ManagementUserController::class, 'index']);
@@ -103,16 +106,16 @@ Route::name('pre')->prefix('cobalagi')->group(function () {
     })->name('pv.user');
 });
 
-// Route dengan middleware admin
-Route::group(['middleware' => ['admin']], function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    });
+// // Route dengan middleware admin
+// Route::group(['middleware' => ['admin']], function () {
+//     Route::get('/admin/dashboard', function () {
+//         return view('admin.dashboard');
+//     });
 
-    Route::get('/admin/settings', function () {
-        return view('admin.settings');
-    });
-});
+//     Route::get('/admin/settings', function () {
+//         return view('admin.settings');
+//     });
+// });
 
 // Route Group Middleware acara 12
 Route::get('/', function () {
@@ -129,3 +132,30 @@ Route::middleware(['web', 'subscribed'])->group(function () {
 Route::put('post/{id}', function ($id) {
 
 })->middleware('role:editor');
+
+
+//backend route
+Route::prefix('backend')->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'showDashboard'])->name('dashboard.backend');
+
+    //pendidikan
+    Route::get('pendidikan', [PendidikanController::class, 'showPendidikan'])->name('pendidikan.backend');
+    Route::get('pendidikan/add', [PendidikanController::class, 'showPendidikanAdd'])->name('pendidikan.backend.add');
+    Route::post('pendidikan/store', [PendidikanController::class, 'storePendidikan'])->name('pendidikan.store');
+    Route::get('pendidikan/edit/{id}', [PendidikanController::class, 'editPendidikan'])->name('edit.pendidikan');
+    Route::put('pendidikan/update/{id}', [PendidikanController::class, 'updatePendidikan'])->name('update.pendidikan');
+    Route::delete('pendidikan/delete/{id}', [PendidikanController::class, 'deletePendidikan'])->name('delete.pendidikan');
+
+    //pengalaman kerja
+    Route::get('pengalamankerja', [PengalamanKerjaController::class, 'showPengalamanKerja'])->name('pengalamankerja.backend');
+    Route::get('pengalamankerja/add', [PengalamanKerjaController::class, 'showPengalamanKerjaAdd'])->name('pengalamankerja.backend.add');
+    Route::post('pengalamankerja/store', [PengalamanKerjaController::class, 'storePengalamanKerja'])->name('pengalamankerja.store');
+    Route::get('pengalamankerja/edit/{id}', [PengalamanKerjaController::class, 'editPengalamanKerja'])->name('pengalamankerja.edit');
+    Route::put('pengalamankerja/update/{id}', [PengalamanKerjaController::class, 'updatePengalamanKerja'])->name('pengalamankerja.update');
+    Route::delete('pengalamankerja/delete/{id}', [PengalamanKerjaController::class, 'deletePengalamanKerja'])->name('pengalamankerja.delete');
+
+    //bisa juga menggunakan resource
+    // php artisan make:controller nama --resource
+    // Route::resource(PendidikanController::class);
+    // Route::resource(PengalamanKerjaController::class);
+});
