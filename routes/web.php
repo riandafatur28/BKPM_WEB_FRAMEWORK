@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\CobaController;
+use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\SessionController;
+use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ManagementUserController;
 use App\Http\Controllers\User\UserController;
@@ -159,3 +163,38 @@ Route::prefix('backend')->group(function () {
     // Route::resource(PendidikanController::class);
     // Route::resource(PengalamanKerjaController::class);
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//session
+Route::get('/session/create', [SessionController::class, 'create']);
+Route::get('/session/show', [SessionController::class, 'show']);
+Route::get('/session/delete', [SessionController::class, 'delete']);
+
+//get data from uri
+Route::get('/pegawai/{nama}', [PegawaiController::class, 'index']);
+
+//form and validation form
+Route::get('/formulir', [PegawaiController::class, 'formulir']);
+Route::post('/formulir/proses', [PegawaiController::class, 'proses'])->name('proses.formulir');
+
+//show error
+Route::get('/cobaerror/{nama}', [CobaController::class, 'index']);
+
+//upload gambar
+Route::get('/upload', [UploadController::class, 'upload'])->name('upload');
+Route::post('/upload/proses', [UploadController::class, 'proses_upload'])->name('upload.proses');
+
+// //resize gambar
+// Route::get('/upload/resize', [UploadController::class, 'viewResize'])->name('upload.resize');
+// Route::post('/upload/resize/proses', [UploadController::class, 'proses_upload_resize'])->name('upload.proses.resize');
+
+// //multiple Upload gambar dengan Dropzone
+// Route::get('/dropzone', [UploadController::class, 'dropzone'])->name('dropzone');
+// Route::post('/dropzone/store', [UploadController::class, 'dropzone_store'])->name('dropzone.store');
+
+// //multiple Upload pdf dengan Dropzone
+// Route::get('/dropzone-pdf', [UploadController::class, 'dropzonePdf'])->name('dropzone.pdf');
+// Route::post('/dropzone-pdf/store', [UploadController::class, 'dropzonePdfStore'])->name('dropzone.pdf.store');
