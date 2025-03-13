@@ -187,14 +187,14 @@ Route::get('/cobaerror/{nama}', [CobaController::class, 'index']);
 Route::get('/upload', [UploadController::class, 'upload'])->name('upload');
 Route::post('/upload/proses', [UploadController::class, 'proses_upload'])->name('upload.proses');
 
-// //resize gambar
-// Route::get('/upload/resize', [UploadController::class, 'viewResize'])->name('upload.resize');
-// Route::post('/upload/resize/proses', [UploadController::class, 'proses_upload_resize'])->name('upload.proses.resize');
+//resize gambar
+Route::get('/upload/resize', [UploadController::class, 'viewResize'])->name('upload.resize');
+Route::post('/upload/resize/proses', [UploadController::class, 'proses_upload_resize'])->name('upload.proses.resize');
 
-// //multiple Upload gambar dengan Dropzone
-// Route::get('/dropzone', [UploadController::class, 'dropzone'])->name('dropzone');
-// Route::post('/dropzone/store', [UploadController::class, 'dropzone_store'])->name('dropzone.store');
+//multiple Upload gambar dengan Dropzone
+Route::get('/dropzone', [UploadController::class, 'dropzone'])->name('dropzone');
+Route::post('/dropzone/store', [UploadController::class, 'dropzone_store'])->name('dropzone.store');
 
-// //multiple Upload pdf dengan Dropzone
-// Route::get('/dropzone-pdf', [UploadController::class, 'dropzonePdf'])->name('dropzone.pdf');
-// Route::post('/dropzone-pdf/store', [UploadController::class, 'dropzonePdfStore'])->name('dropzone.pdf.store');
+//multiple Upload pdf dengan Dropzone
+Route::get('/dropzone-pdf', [UploadController::class, 'dropzonePdf'])->name('dropzone.pdf');
+Route::post('/dropzone-pdf/store', [UploadController::class, 'dropzonePdfStore'])->name('dropzone.pdf.store');
